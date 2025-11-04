@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PA Gerry's Mart POS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-card">
+            <div class="login-header"><h1>PA Gerry's Mart POS</h1><p>Point of Sale Management</p></div>
+            <div class="login-tabs">
+                <div class="login-tab active" data-tab="login">Login</div>
+                <div class="login-tab" data-tab="register" id="register-tab" style="display: none;">Register</div>
+            </div>
+            <form id="login-form" class="tab-content active">
+                <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email" placeholder="Enter your email" required autocomplete="email"></div>
+                <div class="form-group"><label for="login-password">Password</label><input type="password" id="login-password" placeholder="Enter your password" required autocomplete="current-password"></div>
+                <button type="submit" class="login-btn" id="login-submit-btn">Login</button>
+                <div id="login-error" class="login-error" style="display: none;">Invalid email or password. Please try again.</div>
+            </form>
+            <form id="register-form" class="tab-content">
+                <div class="form-group"><label for="register-name">Full Name</label><input type="text" id="register-name" placeholder="Enter your full name" required autocomplete="name"></div>
+                <div class="form-group"><label for="register-email">Email</label><input type="email" id="register-email" placeholder="Enter your email" required autocomplete="email"></div>
+                <div class="form-group"><label for="register-password">Password</label><input type="password" id="register-password" placeholder="Create a password" required autocomplete="new-password"></div>
+                <div class="form-group"><label for="register-confirm-password">Confirm Password</label><input type="password" id="register-confirm-password" placeholder="Confirm your password" required autocomplete="new-password"></div>
+                <div class="form-group"><label for="register-role">Role</label><select id="register-role" required><option value="">Select Role</option><option value="admin">Admin</option><option value="cashier">Cashier</option></select></div>
+                <button type="submit" class="login-btn" id="register-submit-btn">Register</button>
+                <div id="register-error" class="login-error" style="display: none;">Registration failed. Please try again.</div>
+            </form>
+        </div>
+    </div>
+    <div id="app-container" class="container" style="display: none;">
+        <div id="sidebar" class="sidebar">
+            <div class="logo"><h1>PA Gerry's Mart POS</h1><p>Point of Sale</p></div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-page="pos"><i class="fas fa-cash-register"></i><span>Point of Sale</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-page="inventory"><i class="fas fa-boxes"></i><span>Inventory</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-page="sales-tracker"><i class="fas fa-chart-line"></i><span>Sales Tracker</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-page="sales-reports"><i class="fas fa-file-alt"></i><span>Sales Reports</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-page="expenses"><i class="fas fa-receipt"></i><span>Expenses</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-page="analysis"><i class="fas fa-chart-pie"></i><span>Analysis</span></a></li>
+                <li class="nav-item"><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                <li class="nav-item" id="user-management-nav" style="display: none;"><a href="#" class="nav-link" data-page="user-management"><i class="fas fa-users"></i><span>User Management</span></a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="header"><h2 id="page-title">Dashboard</h2>
+                <div class="user-info">
+                    <div class="user-icon"><i class="fas fa-user"></i></div>
+                    <span id="current-user">Store Manager</span>
+                    <span id="user-role" class="user-role">Admin</span>
+                    <button class="logout-btn" id="logout-btn">Logout</button>
+                </div>
+            </div>
+            <div id="dashboard-page" class="page-content">
+                <div class="dashboard-summary">
+                    <div class="summary-card">
+                        <div class="summary-value" id="dashboard-daily-sales">₦0.00</div>
+                        <div class="summary-label">Today's Sales</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" id="dashboard-daily-transactions">0</div>
+                        <div class="summary-label">Transactions</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" id="dashboard-daily-expenses">₦0.00</div>
+                        <div class="summary-label">Today's Expenses</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" id="dashboard-net-profit">₦0.00</div>
+                        <div class="summary-label">Net Profit</div>
+                    </div>
+                </div>
+                
+                <div class="sales-tracker-container">
+                    <div class="sales-tracker-card">
+                        <div class="sales-tracker-header">
+                            <div class="sales-tracker-title">
+                                <i class="fas fa-calendar-day"></i> Today's Sales
+                            </div>
+                            <div class="sales-tracker-period" id="dashboard-today-date">Today</div>
+                        </div>
+                        <div class="sales-tracker-content">
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Items Sold:</span>
+                                <span class="sales-metric-value" id="dashboard-today-items-sold">0</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Revenue:</span>
+                                <span class="sales-metric-value" id="dashboard-today-revenue">₦0.00</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Transactions:</span>
+                                <span class="sales-metric-value" id="dashboard-today-transactions">0</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Avg. Transaction:</span>
+                                <span class="sales-metric-value" id="dashboard-today-avg-transaction">₦0.00</span>
+                            </div>
+                        </div>
+                        <div class="sales-tracker-footer">
+                            <span class="sales-trend" id="dashboard-today-trend">
+                                <i class="fas fa-minus"></i> No change from yesterday
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="sales-tracker-card">
+                        <div class="sales-tracker-header">
+                            <div class="sales-tracker-title">
+                                <i class="fas fa-warehouse"></i> Inventory Status
+                            </div>
+                        </div>
+                        <div class="sales-tracker-content">
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Total Products:</span>
+                                <span class="sales-metric-value" id="dashboard-total-products">0</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">In Stock:</span>
+                                <span class="sales-metric-value" id="dashboard-in-stock">0</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Low Stock:</span>
+                                <span class="sales-metric-value" id="dashboard-low-stock">0</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Out of Stock:</span>
+                                <span class="sales-metric-value" id="dashboard-out-of-stock">0</span>
+                            </div>
+                        </div>
+                        <div class="sales-tracker-footer">
+                            <button class="view-details-btn" data-page="inventory">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="sales-tracker-card">
+                        <div class="sales-tracker-header">
+                            <div class="sales-tracker-title">
+                                <i class="fas fa-chart-pie"></i> Analysis
+                            </div>
+                        </div>
+                        <div class="sales-tracker-content">
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">High Risk Items:</span>
+                                <span class="sales-metric-value" id="dashboard-high-risk-items">0</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Discrepancies:</span>
+                                <span class="sales-metric-value" id="dashboard-unusual-discrepancies">0</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Potential Loss:</span>
+                                <span class="sales-metric-value" id="dashboard-potential-loss">₦0.00</span>
+                            </div>
+                            <div class="sales-metric">
+                                <span class="sales-metric-label">Last Alert:</span>
+                                <span class="sales-metric-value" id="dashboard-last-alert">None</span>
+                            </div>
+                        </div>
+                        <div class="sales-tracker-footer">
+                            <button class="view-details-btn" data-page="analysis">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="top-items-container">
+                    <div class="top-items-header">
+                        <h3 class="top-items-title">Top Selling Items</h3>
+                        <select class="form-select" id="dashboard-top-items-period" style="width: auto;">
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                    <div class="top-items-list" id="dashboard-top-items-list">
+                        <div class="empty-state">
+                            <i class="fas fa-chart-bar"></i>
+                            <h3>No Sales Data</h3>
+                            <p>Start making sales to see your top selling items.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="pos-page" class="page-content" style="display: none;"></div>
+            <div id="inventory-page" class="page-content" style="display: none;"></div>
+            <div id="sales-tracker-page" class="page-content" style="display: none;"></div>
+            <div id="sales-reports-page" class="page-content" style="display: none;"></div>
+            <div id="expenses-page" class="page-content" style="display: none;"></div>
+            <div id="analysis-page" class="page-content" style="display: none;"></div>
+            <div id="settings-page" class="page-content" style="display: none;"></div>
+            <div id="user-management-page" class="page-content" style="display: none;"></div>
+        </div>
+    </div>
+    <!-- Modals -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Product</h3>
+                <button class="modal-close" id="close-product-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="product-modal-loading" class="loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Processing...
+                </div>
+                <form id="product-form">
+                    <div class="form-group">
+                        <label for="product-name">Product Name</label>
+                        <input type="text" class="form-input" id="product-name" placeholder="Enter product name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Price</label>
+                        <input type="number" class="form-input" id="product-price" step="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-stock">Stock Quantity</label>
+                        <input type="number" class="form-input" id="product-stock" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-expiry">Expiry Date</label>
+                        <input type="date" class="form-input" id="product-expiry">
+                    </div>
+                    <div class="form-group">
+                        <label for="product-category">Category</label>
+                        <select class="form-select" id="product-category" required>
+                            <option value="">Select Category</option>
+                            <option value="food">Food</option>
+                            <option value="beverages">Beverages</option>
+                            <option value="household">Household</option>
+                            <option value="personal-care">Personal Care</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-barcode">Barcode (Optional)</label>
+                        <input type="text" class="form-input" id="product-barcode" placeholder="Enter barcode">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancel-product">Cancel</button>
+                <button class="btn btn-primary" id="save-product-btn">Add Product</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Complete Sale</h3>
+                <button class="modal-close" id="close-checkout-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="checkout-summary"></div>
+                <div class="form-group">
+                    <label for="payment-method">Payment Method</label>
+                    <select class="form-select" id="payment-method">
+                        <option value="cash">Cash</option>
+                        <option value="card">Card</option>
+                        <option value="transfer">Bank Transfer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="customer-name">Customer Name (Optional)</label>
+                    <input type="text" class="form-input" id="customer-name" placeholder="Enter customer name">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancel-checkout">Cancel</button>
+                <button class="btn btn-primary" id="complete-checkout">Complete Sale</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="receipt-modal" class="modal">
+        <div class="modal-content receipt-modal">
+            <div class="modal-header">
+                <h3>Sales Receipt</h3>
+                <button class="modal-close" id="close-receipt-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="receipt-content"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="print-receipt">Print Receipt</button>
+                <button class="btn btn-primary" id="close-receipt">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-message">Operation completed successfully!</span>
+    </div>
+    
+    <button id="mobile-menu-btn" class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <div id="offline-indicator" class="offline-indicator">
+        <i class="fas fa-wifi-slash"></i> You're offline. Changes will sync when connection is restored.
+    </div>
+    
+    <div id="sync-status" class="sync-status">
+        <i class="fas fa-sync"></i> 
+        <span id="sync-status-text">Syncing data...</span>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.8.2/dist/quagga.min.js"></script>
+    
+    <!-- App Script -->
+    <script src="./script.js"></script>
+</body>
+</html>
